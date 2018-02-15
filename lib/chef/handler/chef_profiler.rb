@@ -9,7 +9,11 @@
 class Chef
   class Handler
     class Profiler < Chef::Handler
-      VERSION = '0.0.2'
+      VERSION = '0.0.3'
+
+      def initialize(log_level="debug")
+        @log_level = log_level
+      end
 
       def report
         cookbooks = Hash.new(0)
@@ -24,26 +28,26 @@ class Chef
         end
 
         # print each timing by group, sorting with highest elapsed time first
-        Chef::Log.debug "Elapsed_time  Cookbook"
-        Chef::Log.debug "------------  -------------"
+        Chef::Log.send(@log_level, "Elapsed_time  Cookbook")
+        Chef::Log.send(@log_level, "------------  -------------")
         cookbooks.sort_by{ |k,v| -v }.each do |cookbook, run_time|
-          Chef::Log.debug "%12f  %s" % [run_time, cookbook]
+          Chef::Log.send(@log_level, "%12f  %s" % [run_time, cookbook])
         end
-        Chef::Log.debug ""
+        Chef::Log.send(@log_level, "")
 
-        Chef::Log.debug "Elapsed_time  Recipe"
-        Chef::Log.debug "------------  -------------"
+        Chef::Log.send(@log_level, "Elapsed_time  Recipe")
+        Chef::Log.send(@log_level, "------------  -------------")
         recipes.sort_by{ |k,v| -v }.each do |recipe, run_time|
-          Chef::Log.debug "%12f  %s" % [run_time, recipe]
+          Chef::Log.send(@log_level, "%12f  %s" % [run_time, recipe])
         end
-        Chef::Log.debug ""
+        Chef::Log.send(@log_level, "")
 
-        Chef::Log.debug "Elapsed_time  Resource"
-        Chef::Log.debug "------------  -------------"
+        Chef::Log.send(@log_level, "Elapsed_time  Resource")
+        Chef::Log.send(@log_level, "------------  -------------")
         resources.sort_by{ |k,v| -v }.each do |resource, run_time|
-          Chef::Log.debug "%12f  %s" % [run_time, resource]
+          Chef::Log.send(@log_level, "%12f  %s" % [run_time, resource])
         end
-        Chef::Log.debug ""
+        Chef::Log.send(@log_level, "")
       end
 
     end
